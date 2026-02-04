@@ -22,7 +22,7 @@ export interface Viewport {
 
 export function calculateViewport(currentMultiplier: number): Viewport {
   const min = VIEWPORT_CONFIG.minValue;
-  let max = VIEWPORT_CONFIG.initialMax;
+  let max: number = VIEWPORT_CONFIG.initialMax;
 
   while (currentMultiplier > min + (max - min) * VIEWPORT_CONFIG.unzoomThreshold) {
     if (max < 5) max = 5;

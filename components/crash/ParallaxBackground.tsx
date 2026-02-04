@@ -15,12 +15,14 @@ interface ParallaxBackgroundProps {
   layers: ParallaxLayer[];
   multiplier: number;
   elapsedTime: number;
+  rocketY?: number;
 }
 
 function ParallaxBackgroundComponent({
   layers,
   multiplier,
   elapsedTime,
+  rocketY = 0,
 }: ParallaxBackgroundProps) {
   const getScrollX = (speedX: number): number => {
     return elapsedTime * speedX * 50;
@@ -28,7 +30,8 @@ function ParallaxBackgroundComponent({
 
   const getScrollY = (speedY: number): number => {
     if (multiplier <= 1) return 0;
-    return Math.log(multiplier) * 100 * speedY;
+    const rocketOffset = (rocketY - 10) * 0.3;
+    return Math.log(multiplier) * 100 * speedY + rocketOffset * speedY;
   };
 
   return (

@@ -8,12 +8,14 @@ interface BackgroundProps {
   intensity?: number;
   elapsedTime?: number;
   multiplier?: number;
+  rocketY?: number;
 }
 
 function BackgroundComponent({
   intensity = 1,
   elapsedTime = 0,
   multiplier = 1,
+  rocketY = 0,
 }: BackgroundProps) {
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -33,6 +35,7 @@ function BackgroundComponent({
           layers={PARALLAX_LAYERS}
           multiplier={multiplier}
           elapsedTime={elapsedTime}
+          rocketY={rocketY}
         />
       )}
     </div>
