@@ -31,7 +31,7 @@ export const CRASH_CONFIG = {
   // Curve timing: how long (seconds) until the given multiplier is reached
   // The actual curve is exponential: multiplier = e^(speed * time)
   // speed calibrated so 2x ≈ 3s, 10x ≈ 7s, 100x ≈ 12s
-  curveSpeed: 0.23,  // e^(0.23 * t) → t=3 → 2.0x, t=7 → 5.0x, t=10 → 10x, t=14 → 25x
+  curveSpeed: 0.15,  // e^(0.23 * t) → t=3 → 2.0x, t=7 → 5.0x, t=10 → 10x, t=14 → 25x
   
   // Auto-play options
   autoPlayOptions: [5, 10, 25, 50],

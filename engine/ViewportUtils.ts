@@ -12,7 +12,7 @@ export const VIEWPORT_CONFIG = {
 } as const;
 
 export const TIME_CONFIG = {
-  travelDuration: 3,
+  travelDuration: 5,
   startX: 8,
   endX: 90,
 } as const;
