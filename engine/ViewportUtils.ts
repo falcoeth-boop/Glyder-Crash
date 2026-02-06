@@ -6,13 +6,15 @@ export const VIEWPORT_CONFIG = {
   minValue: 1,
   maxValue: 1000,
   initialMax: 2,
-  unzoomThreshold: 0.85,
+  /** Target screen position for the current multiplier (0-1). 
+   *  0.9 means the rocket stays at ~90% height once past initialMax. */
+  targetPosition: 0.9,
 } as const;
 
 export const TIME_CONFIG = {
   travelDuration: 3,
   startX: 8,
-  endX: 75,
+  endX: 90,
 } as const;
 
 export interface Viewport {
@@ -22,20 +24,12 @@ export interface Viewport {
 
 export function calculateViewport(currentMultiplier: number): Viewport {
   const min = VIEWPORT_CONFIG.minValue;
-  let max: number = VIEWPORT_CONFIG.initialMax;
 
-  while (currentMultiplier > min + (max - min) * VIEWPORT_CONFIG.unzoomThreshold) {
-    if (max < 5) max = 5;
-    else if (max < 10) max = 10;
-    else if (max < 20) max = 20;
-    else if (max < 50) max = 50;
-    else if (max < 100) max = 100;
-    else if (max < 200) max = 200;
-    else if (max < 500) max = 500;
-    else max = VIEWPORT_CONFIG.maxValue;
-
-    if (max >= VIEWPORT_CONFIG.maxValue) break;
-  }
+  // Smoothly expand viewport so the current multiplier stays at ~targetPosition (75%) of the range.
+  // requiredMax = min + (currentMultiplier - min) / targetPosition
+  // This is continuous — no discrete jumps.
+  const requiredMax = min + (currentMultiplier - min) / VIEWPORT_CONFIG.targetPosition;
+  const max = Math.max(VIEWPORT_CONFIG.initialMax, requiredMax);
 
   return { min, max: Math.min(max, VIEWPORT_CONFIG.maxValue) };
 }

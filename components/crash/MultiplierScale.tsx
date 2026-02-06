@@ -51,10 +51,8 @@ function generateScaleLabels(viewMin: number, viewMax: number): number[] {
     labels.unshift(1);
   }
 
-  // Always include the max value
-  if (!labels.includes(viewMax)) {
-    labels.push(viewMax);
-  }
+  // With a continuous viewport, the max value is a non-round number that changes
+  // every frame. Only show clean step-based labels — skip the raw viewport max.
 
   return labels;
 }

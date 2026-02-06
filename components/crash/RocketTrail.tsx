@@ -4,7 +4,7 @@ import { useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CrashState } from '@/types';
 import { timeToMultiplier } from '@/engine/MultiplierCurve';
-import { getCachedViewport, getViewportY, getTimeBasedX } from '@/engine/ViewportUtils';
+import { getCachedViewport, getViewportY, getTimeBasedX, TIME_CONFIG } from '@/engine/ViewportUtils';
 
 interface Props {
   currentMultiplier: number;
@@ -29,10 +29,17 @@ function RocketTrailComponent({ currentMultiplier, state, elapsedTime }: Props) 
     const points: { x: number; y: number }[] = [];
     const timeStep = elapsedTime / TRAIL_POINTS;
 
+    // Distribute trail points linearly across the X range relative to total elapsed time.
+    // This keeps the exponential curve shape visible at all multiplier levels.
+    // During takeoff (< travelDuration), currentRocketX grows from startX to endX.
+    // After takeoff, currentRocketX stays at endX and older points compress leftward.
+    const currentRocketX = getTimeBasedX(elapsedTime);
+    const xRange = currentRocketX - TIME_CONFIG.startX;
+
     for (let i = 0; i <= TRAIL_POINTS; i++) {
       const t = i * timeStep;
       const mult = timeToMultiplier(t);
-      const x = getTimeBasedX(t);
+      const x = TIME_CONFIG.startX + (elapsedTime > 0 ? (t / elapsedTime) * xRange : 0);
       const y = 100 - getViewportY(mult, viewport.min, viewport.max);
       points.push({ x, y });
     }
